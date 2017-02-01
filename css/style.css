@@ -1,3 +1,29 @@
 body {
     text-align: center;
 }
+
+.clearfix:before,
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+.is-hidden {
+    display: none;
+}
+
+.is-clickable {
+    cursor: pointer;
+}
+
+.control-panel {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.pull-left { float: left; }
+.pull-right { float: right; }

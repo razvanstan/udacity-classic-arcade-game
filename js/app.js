@@ -1,46 +1,219 @@
-// Enemies our player must avoid
-var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
 
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-};
+  'use strict';
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-};
+  var firstEnemy, secondEnemy, thirdEnemy, allEnemies;
 
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
+  var Enemy = function () {
+    this.x;
+    this.y;
+    this.w = 101;
+    this.h = 171;
+    this.speed = getRandomInt(100,200);
+    this.sprite = getRandomEnemyImage();
+  };
+
+  Enemy.prototype.update = function(dt) {
+    return (this.x < 500) ? this.x += this.speed * dt : this.x = -Math.random() * 300;
+  };
+
+  Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
+  };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+  function getRandomEnemyImage() {
+      var enemies = ['images/enemy01.png', 'images/enemy02.png', 'images/enemy03.png'];
+      return enemies[Math.floor((Math.random()*enemies.length))];
+  }
+
+  function getRandomInt(min, max){
+    return Math.floor(Math.random() * (max - min + 10)) + min;
+  }
+
+  var Player = function () {
+    this.x = 200;
+    this.y = 400;
+    this.w = 101;
+    this.h = 171;
+    this.sprite = 'images/player.png';
+    this.dead = false;
+  };
+
+  Player.prototype.collision = function() {
+
+    if  (isCollisionWithFirstEnemy() || isCollisionWithSecondEnemy() || isCollisionWithThirdEnemy()) {
+
+      player.reset();
+      updatelives();
+
+      if (availablelives === 0) {
+        gameOver();
+      }
+    }
+
+    function isCollisionWithFirstEnemy () {
+      return (firstEnemy.x + firstEnemy.w - 25) > player.x && firstEnemy.x < (player.x + player.w - 25) && firstEnemy.y == (player.y + 2);
+    }
+
+    function isCollisionWithSecondEnemy () {
+      return  (secondEnemy.x + secondEnemy.w - 25) > player.x && secondEnemy.x < (player.x + player.w - 25) && secondEnemy.y == player.y
+    }
+
+    function isCollisionWithThirdEnemy () {
+      return thirdEnemy.x + thirdEnemy.w - 25 > player.x && thirdEnemy.x < (player.x + player.w - 25) && thirdEnemy.y == (player.y - 2)
+    }
+  };
+
+  Player.prototype.update = function(dt) {
+      var playerPosition = this;
+    if (isPlayerOnTop()) {
+        changeCurrentScore();
+      player.reset();
+    }
+
+    function isPlayerOnTop () {
+        return playerPosition.y < 11;
+    }
+  };
+
+  function toggleDeadMessage() {
+    $('.dead-message').toggleClass('is-hidden');
+  }
+
+  function togglePlayAgainButton() {
+    $('.js-play-again').toggleClass('is-hidden');
+  }
+
+  function changeCurrentScore() {
+    currentScore += 1;
+    setScoreOnScreen(currentScore);
+  }
+
+  function changeMaxScore() {
+    (maxScore < currentScore) ? maxScore = currentScore : maxScore;
+    setMaxScoreOnScreen(maxScore);
+  }
+
+  function setScoreOnScreen(score) {
+    $('.js-score').text(score);
+  }
+
+  function setMaxScoreOnScreen(score) {
+    $('.js-maxscore').text(score);
+  }
+
+  function setAvailableLivesOnScreen(lives) {
+    $('.js-lives').text(lives);
+  }
+
+  Player.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  };
+
+  Player.prototype.handleInput = function(direction) {
+
+      var playerPosition = this;
+
+      switch(direction) {
+        case 'up':
+          movePlayerUp();
+          break;
+
+        case 'down':
+          movePlayerDown();
+          break;
+
+        case 'left':
+          movePlayerLeft();
+          break;
+
+        case 'right':
+          movePlayerRigth();
+          break;
+      }
+
+    function movePlayerUp(){
+      return (playerPosition.y > 0)? playerPosition.y -= 85 : playerPosition.y;
+    }
+
+    function movePlayerDown(){
+        return (playerPosition.y < 400)? playerPosition.y += 85 : playerPosition.y;
+    }
+
+    function movePlayerLeft(){
+      return (playerPosition.x > 0)? playerPosition.x -= 100 : playerPosition.y;
+    }
+
+    function movePlayerRigth(){
+      return (playerPosition.x < 400)? playerPosition.x += 100 : playerPosition.x;
+    }
+  };
+
+  Player.prototype.reset = function() {
+    this.x = 200;
+    this.y = 400;
+  };
 
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+  function updatelives() {
+    availablelives -= 1;
+    setAvailableLivesOnScreen(availablelives);
+  }
 
+  function _playAgain() {
+    player.dead = false;
+    Engine.init();
+    currentScore = 0;
+    availablelives = defaultlives;
 
+    setScoreOnScreen(currentScore);
+    setAvailableLivesOnScreen(availablelives);
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
+    toggleDeadMessage();
+    togglePlayAgainButton();
+  }
+
+  function initEnemies() {
+    firstEnemy = new Enemy();
+    firstEnemy.x = -101;
+    firstEnemy.y = 62;
+
+    secondEnemy = new Enemy();
+    secondEnemy.x = -101;
+    secondEnemy.y = 145;
+
+    thirdEnemy = new Enemy();
+    thirdEnemy.x = -101;
+    thirdEnemy.y = 228;
+
+    allEnemies = [firstEnemy, secondEnemy, thirdEnemy];
+  }
+
+  var player = new Player();
+
+  var defaultlives = 3;
+  var availablelives = defaultlives;
+  var currentScore = 0;
+  var maxScore = 0;
+
+  setAvailableLivesOnScreen(availablelives);
+  setScoreOnScreen(currentScore);
+
+  $('.control-panel').on('click', '.js-play-again', _playAgain);
+
+  function gameOver() {
+    toggleDeadMessage();
+    togglePlayAgainButton();
+    changeMaxScore();
+    player.dead = true;
+  }
+
+  document.addEventListener('keyup', function(e) {
     var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
+      37: 'left',
+      38: 'up',
+      39: 'right',
+      40: 'down'
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
-});
+  });

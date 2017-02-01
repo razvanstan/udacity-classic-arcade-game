@@ -6,6 +6,19 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div class="control-panel clearfix">
+        <div class="pull-left">
+            <div id="currentscore" class="score">Current Score: <span class="js-score">0</span></div>
+            <div id="maxscore" class="score">Max Score: <span class="js-maxscore">0</span></div>
+            <div class="score">Lives: <span class="js-lives"></span> </div>
+        </div>
+        <div class="pull-right">
+          <span class="js-play-again is-clickable is-hidden">Play Again</span>
+        </div>
+      <div class="dead-message is-hidden">You are dead!</div>
+    </div>
+
+    <script src="js/jquery-3.1.1.min.js"></script>
     <script src="js/resources.js"></script>
     <script src="js/app.js"></script>
     <script src="js/engine.js"></script>

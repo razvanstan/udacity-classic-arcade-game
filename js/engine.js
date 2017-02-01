@@ -56,7 +56,12 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
+
+      if (player.dead) {
+        // code to show win screen
+      } else {
         win.requestAnimationFrame(main);
+      }
     }
 
     /* This function does some initial setup that should only occur once,
@@ -66,7 +71,8 @@ var Engine = (function(global) {
     function init() {
         reset();
         lastTime = Date.now();
-        main();
+      initEnemies();
+      main();
     }
 
     /* This function is called by main (our game loop) and itself calls all
@@ -80,7 +86,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        player.collision();
     }
 
     /* This is called by the update function and loops through all of the
@@ -171,7 +177,11 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/enemy01.png',
+        'images/enemy02.png',
+        'images/enemy03.png',
+        'images/char-boy.png',
+        'images/player.png'
     ]);
     Resources.onReady(init);
 
@@ -180,4 +190,8 @@ var Engine = (function(global) {
      * from within their app.js files.
      */
     global.ctx = ctx;
+
+    return {
+      init: init
+    }
 })(this);
