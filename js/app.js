@@ -42,7 +42,7 @@
 
     if  (isCollisionWithFirstEnemy() || isCollisionWithSecondEnemy() || isCollisionWithThirdEnemy()) {
 
-      player.reset();
+      this.reset();
       updatelives();
 
       if (availablelives === 0) {
@@ -64,14 +64,15 @@
   };
 
   Player.prototype.update = function(dt) {
-      var playerPosition = this;
+    var playerPosition = this;
+
     if (isPlayerOnTop()) {
-        changeCurrentScore();
-      player.reset();
+      changeCurrentScore();
+      this.reset();
     }
 
     function isPlayerOnTop () {
-        return playerPosition.y < 11;
+      return playerPosition.y < 11;
     }
   };
 
@@ -111,41 +112,39 @@
 
   Player.prototype.handleInput = function(direction) {
 
-      var playerPosition = this;
-
       switch(direction) {
         case 'up':
-          movePlayerUp();
+          this.movePlayerUp();
           break;
 
         case 'down':
-          movePlayerDown();
+          this.movePlayerDown();
           break;
 
         case 'left':
-          movePlayerLeft();
+          this.movePlayerLeft();
           break;
 
         case 'right':
-          movePlayerRigth();
+          this.movePlayerRigth();
           break;
       }
+  };
 
-    function movePlayerUp(){
-      return (playerPosition.y > 0)? playerPosition.y -= 85 : playerPosition.y;
-    }
+  Player.prototype.movePlayerUp = function() {
+      return (this.y > 0)? this.y -= 85 : this.y;
+  };
 
-    function movePlayerDown(){
-        return (playerPosition.y < 400)? playerPosition.y += 85 : playerPosition.y;
-    }
+  Player.prototype.movePlayerDown = function() {
+      return (this.y < 400)? this.y += 85 : this.y;
+  };
 
-    function movePlayerLeft(){
-      return (playerPosition.x > 0)? playerPosition.x -= 100 : playerPosition.y;
-    }
+  Player.prototype.movePlayerLeft = function() {
+      return (this.x > 0)? this.x -= 100 : this.y;
+  };
 
-    function movePlayerRigth(){
-      return (playerPosition.x < 400)? playerPosition.x += 100 : playerPosition.x;
-    }
+  Player.prototype.movePlayerRigth = function() {
+      return (this.x < 400)? this.x += 100 : this.x;
   };
 
   Player.prototype.reset = function() {
