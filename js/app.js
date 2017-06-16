@@ -6,8 +6,8 @@
   var Enemy = function () {
     this.x;
     this.y;
-    this.w = 101;
-    this.h = 171;
+    this.width = 101;
+    this.height = 171;
     this.speed = getRandomInt(100,200);
     this.sprite = getRandomEnemyImage();
   };
@@ -32,8 +32,8 @@
   var Player = function () {
     this.x = 200;
     this.y = 400;
-    this.w = 101;
-    this.h = 171;
+    this.width = 101;
+    this.height = 171;
     this.sprite = 'images/player.png';
     this.dead = false;
   };
@@ -51,15 +51,15 @@
     }
 
     function isCollisionWithFirstEnemy () {
-      return (firstEnemy.x + firstEnemy.w - 25) > player.x && firstEnemy.x < (player.x + player.w - 25) && firstEnemy.y == (player.y + 2);
+      return (firstEnemy.x + firstEnemy.width - 25) > player.x && firstEnemy.x < (player.x + player.width - 25) && firstEnemy.y == (player.y + 2);
     }
 
     function isCollisionWithSecondEnemy () {
-      return  (secondEnemy.x + secondEnemy.w - 25) > player.x && secondEnemy.x < (player.x + player.w - 25) && secondEnemy.y == player.y
+      return  (secondEnemy.x + secondEnemy.width - 25) > player.x && secondEnemy.x < (player.x + player.width - 25) && secondEnemy.y == player.y;
     }
 
     function isCollisionWithThirdEnemy () {
-      return thirdEnemy.x + thirdEnemy.w - 25 > player.x && thirdEnemy.x < (player.x + player.w - 25) && thirdEnemy.y == (player.y - 2)
+      return thirdEnemy.x + thirdEnemy.width - 25 > player.x && thirdEnemy.x < (player.x + player.width - 25) && thirdEnemy.y == (player.y - 2);
     }
   };
 
@@ -90,7 +90,7 @@
   }
 
   function changeMaxScore() {
-    (maxScore < currentScore) ? maxScore = currentScore : maxScore;
+    maxScore = Math.max(maxScore, currentScore);
     setMaxScoreOnScreen(maxScore);
   }
 
