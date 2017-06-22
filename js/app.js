@@ -3,9 +3,9 @@
 
   var firstEnemy, secondEnemy, thirdEnemy, allEnemies;
 
-  var Enemy = function () {
-    this.x;
-    this.y;
+  var Enemy = function (x, y) {
+    this.x = x;
+    this.y = y;
     this.width = 101;
     this.height = 171;
     this.speed = getRandomInt(100,200);
@@ -40,7 +40,7 @@
 
   Player.prototype.collision = function() {
 
-    if  (isCollisionWithFirstEnemy() || isCollisionWithSecondEnemy() || isCollisionWithThirdEnemy()) {
+    if  (this.isCollisionWithFirstEnemy() || this.isCollisionWithSecondEnemy() || this.isCollisionWithThirdEnemy()) {
 
       this.reset();
       updatelives();
@@ -49,30 +49,27 @@
         gameOver();
       }
     }
-
-    function isCollisionWithFirstEnemy () {
-      return (firstEnemy.x + firstEnemy.width - 25) > player.x && firstEnemy.x < (player.x + player.width - 25) && firstEnemy.y == (player.y + 2);
-    }
-
-    function isCollisionWithSecondEnemy () {
-      return  (secondEnemy.x + secondEnemy.width - 25) > player.x && secondEnemy.x < (player.x + player.width - 25) && secondEnemy.y == player.y;
-    }
-
-    function isCollisionWithThirdEnemy () {
-      return thirdEnemy.x + thirdEnemy.width - 25 > player.x && thirdEnemy.x < (player.x + player.width - 25) && thirdEnemy.y == (player.y - 2);
-    }
   };
+
+  Player.prototype.isCollisionWithFirstEnemy = function() {
+      return (firstEnemy.x + firstEnemy.width - 25) > this.x && firstEnemy.x < (this.x + this.width - 25) && firstEnemy.y == (this.y + 2);
+  };
+
+  Player.prototype.isCollisionWithSecondEnemy = function() {
+      return  (secondEnemy.x + secondEnemy.width - 25) > this.x && secondEnemy.x < (this.x + this.width - 25) && secondEnemy.y == this.y;
+  };
+
+  Player.prototype.isCollisionWithThirdEnemy = function() {
+      return thirdEnemy.x + thirdEnemy.width - 25 > this.x && thirdEnemy.x < (this.x + this.width - 25) && thirdEnemy.y == (this.y - 2);
+  };
+
 
   Player.prototype.update = function(dt) {
     var playerPosition = this;
 
-    if (isPlayerOnTop()) {
+    if (playerPosition.y < 11) {
       changeCurrentScore();
       this.reset();
-    }
-
-    function isPlayerOnTop () {
-      return playerPosition.y < 11;
     }
   };
 
@@ -94,16 +91,20 @@
     setMaxScoreOnScreen(maxScore);
   }
 
+  function setText(selector, text) {
+      $(selector).text(text);
+  }
+
   function setScoreOnScreen(score) {
-    $('.js-score').text(score);
+      setText('.js-score', score);
   }
 
   function setMaxScoreOnScreen(score) {
-    $('.js-maxscore').text(score);
+      setText('.js-maxscore', score);
   }
 
   function setAvailableLivesOnScreen(lives) {
-    $('.js-lives').text(lives);
+      setText('.js-lives', lives);
   }
 
   Player.prototype.render = function() {
@@ -172,17 +173,9 @@
   }
 
   function initEnemies() {
-    firstEnemy = new Enemy();
-    firstEnemy.x = -101;
-    firstEnemy.y = 62;
-
-    secondEnemy = new Enemy();
-    secondEnemy.x = -101;
-    secondEnemy.y = 145;
-
-    thirdEnemy = new Enemy();
-    thirdEnemy.x = -101;
-    thirdEnemy.y = 228;
+    firstEnemy = new Enemy(-101, 62);
+    secondEnemy = new Enemy(-101, 145);
+    thirdEnemy = new Enemy(-101, 228);
 
     allEnemies = [firstEnemy, secondEnemy, thirdEnemy];
   }
