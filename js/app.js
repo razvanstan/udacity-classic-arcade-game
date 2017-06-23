@@ -47,6 +47,7 @@
 
       if (availablelives === 0) {
         gameOver();
+        this.dead = true;
       }
     }
   };
@@ -196,7 +197,6 @@
     toggleDeadMessage();
     togglePlayAgainButton();
     changeMaxScore();
-    player.dead = true;
   }
 
   document.addEventListener('keyup', function(e) {
